@@ -75,28 +75,30 @@ const PostsPage = () => {
         <div className="posts-block">
           {data.map((post, index) => (
             <>
-              <li
-                key={index}
-                onClick={() => handlePostPage(post.id)}
-                className="posts-div"
-              >
-                <p>
-                  <b>UserId:</b>
-                  {post.userId}
-                </p>
-                <p>
-                  <b>Id:</b>
-                  {post.id}
-                </p>
-                <p>
-                  <b>Title:</b>
-                  {post.title}
-                </p>
-                <p>
-                  <b>Body:</b>
-                  {post.body}
-                </p>
-              </li>
+              <ul>
+                <li
+                  key={index}
+                  onClick={() => handlePostPage(post.id)}
+                  className="posts-div"
+                >
+                  <p>
+                    <b>UserId:</b>
+                    {post.userId}
+                  </p>
+                  <p>
+                    <b>Id:</b>
+                    {post.id}
+                  </p>
+                  <p>
+                    <b>Title:</b>
+                    {post.title}
+                  </p>
+                  <p>
+                    <b>Body:</b>
+                    {post.body}
+                  </p>
+                </li>
+              </ul>
             </>
           ))}
         </div>
