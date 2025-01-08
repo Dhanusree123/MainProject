@@ -74,32 +74,28 @@ const PostsPage = () => {
         <h2>Posts</h2>
         <div className="posts-block">
           {data.map((post, index) => (
-            <>
-              <ul>
-                <li
-                  key={index}
-                  onClick={() => handlePostPage(post.id)}
-                  className="posts-div"
-                >
-                  <p>
-                    <b>UserId:</b>
-                    {post.userId}
-                  </p>
-                  <p>
-                    <b>Id:</b>
-                    {post.id}
-                  </p>
-                  <p>
-                    <b>Title:</b>
-                    {post.title}
-                  </p>
-                  <p>
-                    <b>Body:</b>
-                    {post.body}
-                  </p>
-                </li>
-              </ul>
-            </>
+            <div
+              key={index}
+              onClick={() => handlePostPage(post.id)}
+              className="posts-div"
+            >
+              <p>
+                <b>UserId:</b>
+                {post.userId}
+              </p>
+              <p>
+                <b>Id:</b>
+                {post.id}
+              </p>
+              <p>
+                <b>Title:</b>
+                {post.title}
+              </p>
+              <p>
+                <b>Body:</b>
+                {post.body}
+              </p>
+            </div>
           ))}
         </div>
         <div className="btns-prev-next">
