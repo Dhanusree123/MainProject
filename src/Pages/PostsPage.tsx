@@ -75,7 +75,7 @@ const PostsPage = () => {
         <div className="posts-block">
           {data.map((post, index) => (
             <>
-              <div
+              <li
                 key={index}
                 onClick={() => handlePostPage(post.id)}
                 className="posts-div"
@@ -96,7 +96,7 @@ const PostsPage = () => {
                   <b>Body:</b>
                   {post.body}
                 </p>
-              </div>
+              </li>
             </>
           ))}
         </div>
