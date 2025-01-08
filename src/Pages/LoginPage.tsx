@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import "../styles/LoginPagestyle.css";
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import '../styles/LoginPagestyle.css';
 type FormValues = {
   email: string;
   password: string;
@@ -13,54 +13,54 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLocalStorage = (data: FormValues) => {
-    const mailLocal = localStorage.getItem("Email");
-    const passwordLocal = localStorage.getItem("Password");
+    const mailLocal = localStorage.getItem('email');
+    const passwordLocal = localStorage.getItem('password');
     if (mailLocal !== data.email && passwordLocal !== data.password) {
-      alert("Please enter valid email and password");
+      alert('Please enter valid email and password');
       return;
     }
-    if (mailLocal !== data.email) alert("Please enter the correct email");
+    if (mailLocal !== data.email) alert('Please enter the correct email');
     if (passwordLocal !== data.password)
-      alert("Please enter the correct password");
+      alert('Please enter the correct password');
     if (mailLocal === data.email && passwordLocal === data.password) {
-      navigate("/users-posts");
+      navigate('/users-posts');
     }
   };
 
   return (
     <>
-      <div className="form-block">
+      <div className='form-block'>
         <form onSubmit={handleSubmit(handleLocalStorage)} noValidate>
-          <p className="p-login">LOGIN</p>
-          <div className="form-input">
+          <p className='p-login'>LOGIN</p>
+          <div className='form-input'>
             <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              {...register("email", {
+              type='email'
+              id='email'
+              placeholder='Enter your email'
+              {...register('email', {
                 required: {
                   value: true,
-                  message: "Email is required",
+                  message: 'Email is required',
                 },
               })}
             />
-            <p className="error-control">{errors.email?.message}</p>
+            <p className='error-control'>{errors.email?.message}</p>
           </div>
-          <div className="form-input">
+          <div className='form-input'>
             <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              {...register("password", {
+              type='password'
+              id='password'
+              placeholder='Enter your password'
+              {...register('password', {
                 required: {
                   value: true,
-                  message: "Password is required",
+                  message: 'Password is required',
                 },
               })}
             />
-            <p className="error-control">{errors.password?.message}</p>
+            <p className='error-control'>{errors.password?.message}</p>
           </div>
-          <button className="btn-login" type="submit">
+          <button className='btn-login' type='submit'>
             Submit
           </button>
         </form>
