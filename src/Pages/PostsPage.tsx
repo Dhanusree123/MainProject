@@ -1,70 +1,119 @@
-import Mixer from "../assets/mixer.webp";
-import Ironbox from "../assets/ironbox.webp";
-import Induction from "../assets/induction.webp";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../styles/Postsstyle.css";
+
+type poststype = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+};
+
 const PostsPage = () => {
-  const [email, setEmail] = useState<string>();
+  const [data, setData] = useState<poststype[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+
   const storedValue = localStorage.getItem("Email");
+
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const initialPage = Number(query.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const recordsPerPage = 5;
+  const npages = Math.ceil(totalCount / recordsPerPage);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (storedValue) {
-      setEmail(storedValue);
+    axios
+      .get(
+        `https://jsonplaceholder.typicode.com/posts?_start=${
+          (currentPage - 1) * recordsPerPage
+        }&_limit=${recordsPerPage}`
+      )
+      .then((res) => {
+        setData(res.data);
+        const dataCount = res.headers["x-total-count"];
+
+        setTotalCount(dataCount);
+      })
+      .catch((err) => console.log(err));
+  }, [currentPage]);
+
+  const previousPage = () => {
+    if (currentPage !== 1) {
+      const newpage = currentPage - 1;
+      setCurrentPage(newpage);
+      navigate(`/users-posts/posts?page=${newpage}`);
     }
-  }, [storedValue]);
+  };
+  const nextPage = () => {
+    if (currentPage !== npages) {
+      const newpage = currentPage + 1;
+      setCurrentPage(newpage);
+
+      navigate(`/users-posts/posts?page=${newpage}`);
+    }
+  };
+  const handlePostPage = (id: number) => {
+    navigate(`/users-posts/posts/post/${id}`);
+  };
+
   return (
     <>
-      <div className="mail-data">{email}</div>
-      <div className="posts-header"></div>
-      <div className="container-posts">
-        <div className="post1">
-          <button className="btn-post1" onClick={() => navigate("/post1")}>
-            <div className="left">
-              <img src={Mixer} width="150px" height="150px" />
-            </div>
-            <div className="right">
-              <h4>Food Processors: Get the Deals</h4>
-              <p>
-                A food processor is a versatile kitchen appliance designed to
-                automate food preparation tasks such as chopping, slicing,
-                grating, and pureeing. Food processors save time and effort in
-                the kitchen, enhancing cooking efficiency.
-              </p>
-            </div>
+      <div className="posts-page">
+        <h1>{storedValue}</h1>
+        <div className="go-to-posts">
+          <button
+            className="btn-users-posts"
+            onClick={() => navigate("/users-posts")}
+          >
+            Go Back
           </button>
         </div>
-        <div className="post2">
-          <button className="btn-post2" onClick={() => navigate("/post2")}>
-            <div className="left">
-              <img src={Ironbox} width="150px" height="150px" />
-            </div>
-            <div className="right">
-              <h4>Iron Box: Perfect for Effortless, Crisp Clothing</h4>
-              <p>
-                Our iron box is designed to give your clothes a smooth,
-                wrinkle-free finish with ease. Featuring advanced heating
-                technology and steam control, it ensures fast and efficient
-                ironing, making it the ideal choice for everyday use. Upgrade
-                your wardrobe care with our reliable, high-performance iron box!
-              </p>
-            </div>
-          </button>
+        <h2>Posts</h2>
+        <div className="posts-block">
+          {data.map((post, index) => (
+            <>
+              <div
+                key={index}
+                onClick={() => handlePostPage(post.id)}
+                className="posts-div"
+              >
+                <p>
+                  <b>UserId:</b>
+                  {post.userId}
+                </p>
+                <p>
+                  <b>Id:</b>
+                  {post.id}
+                </p>
+                <p>
+                  <b>Title:</b>
+                  {post.title}
+                </p>
+                <p>
+                  <b>Body:</b>
+                  {post.body}
+                </p>
+              </div>
+            </>
+          ))}
         </div>
-        <div className="post3">
-          <button className="btn-post3" onClick={() => navigate("/post3")}>
-            <div className="left">
-              <img src={Induction} width="150px" height="150px" />
-            </div>
-            <div className="right">
-              <h4>Induction Cooker: Fast, Efficient, and Modern Cooking</h4>
-              <p>
-                Experience the future of cooking with our induction cooker,
-                offering quick heat-up times and precise temperature control.
-                Its energy-efficient design and sleek appearance make it the
-                perfect addition to any modern kitchen, delivering fast, safe,
-                and convenient cooking for everyday meals.
-              </p>
-            </div>
+        <div className="btns-prev-next">
+          <button
+            type="button"
+            onClick={previousPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            onClick={nextPage}
+            disabled={currentPage === npages}
+          >
+            Next
           </button>
         </div>
       </div>

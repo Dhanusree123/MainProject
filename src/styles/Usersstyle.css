@@ -1,0 +1,79 @@
+.users-page{
+    background-image: linear-gradient(to bottom,violet,yellow,gray);
+  }
+  .header-users{
+    padding:20px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color:white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  .go-to-usersposts{
+    display: flex;
+    justify-content: left;
+    margin:20px;
+  }
+  .btn-users-posts{
+    padding:10px;
+    border-radius: 10px;
+  }
+  .users-h2{
+    text-align: center;
+    padding-top:0;
+  }
+  .users-block{
+    display: flex;
+    justify-content: center;
+    padding:40px;
+  }
+  .table-users th,.table-users td,.table-users tr{
+    border: 1px solid black;
+    border-collapse: collapse;
+    cursor: pointer;
+    padding:10px;
+  }
+  .btns-prev-next{
+    display: flex;
+    padding:50px;
+    justify-content:center;
+    margin-top: 20px;
+  }
+  .btn-users{
+    padding:10px;
+    border-radius: 10px;
+  }
+  .post-block{
+    border:3px solid black;
+    padding:30px;
+    margin:20px
+  }
+  .back-to-users{
+    padding:10px;
+    margin:20px;
+    margin-left:0;
+    border-radius: 10px;
+  }
+  .user-block{
+    display: flex;
+    justify-content: center;
+  }
+
+  .table-user{
+    border: 1px solid black;
+    margin-top:70px
+  }
+  .table-user th{
+    border: 1px solid black;
+    padding:10px;
+  }
+  .table-user td{
+    border: 1px solid black;
+    padding:10px;
+  }
+  .table-user tr{
+    border: 1px solid black;
+  }
+  h1{
+    text-align: center;
+  }

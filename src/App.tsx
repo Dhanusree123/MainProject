@@ -2,22 +2,20 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import UsersPostsPage from "./Pages/UsersPostsPage";
 import UsersPage from "./Pages/UsersPage";
+import UserPage from "./Pages/UserPage";
 import PostsPage from "./Pages/PostsPage";
-import Post1 from "./Pages/Post1";
-import Post2 from "./Pages/Post2";
-import Post3 from "./Pages/Post3";
+import PostPage from "./Pages/PostPage";
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/usersposts" element={<UsersPostsPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/posts" element={<PostsPage />} />
-        <Route path="/post1" element={<Post1 />} />
-        <Route path="/post2" element={<Post2 />} />
-        <Route path="/post3" element={<Post3 />} />
+        <Route path="/users-posts" element={<UsersPostsPage />} />
+        <Route path="/users-posts/users" element={<UsersPage />} />
+        <Route path="/users-posts/users/user/:id" element={<UserPage />} />
+        <Route path="users-posts/posts" element={<PostsPage />} />
+        <Route path="/users-posts/posts/post/:id" element={<PostPage />} />
       </Routes>
     </>
   );

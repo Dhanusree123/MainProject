@@ -1,68 +1,69 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPagestyle.css";
 type FormValues = {
-  username: string;
   email: string;
+  password: string;
 };
 
 const LoginPage = () => {
   const form = useForm<FormValues>();
-  const { register, formState } = form;
-  const { errors, isDirty, isValid } = formState;
-  const [email, setEmail] = useState("");
+  const { register, formState, handleSubmit } = form;
+  const { errors } = formState;
   const navigate = useNavigate();
 
-  const handleLocalStorage = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const enteredMail = (e.target as HTMLFormElement).email.value;
-    localStorage.setItem("Email", enteredMail);
-    setEmail(enteredMail);
-    console.log(email);
-    alert("Details Saved Successfully");
-    navigate("/usersposts");
+  const handleLocalStorage = (data: FormValues) => {
+    const mailLocal = localStorage.getItem("Email");
+    const passwordLocal = localStorage.getItem("Password");
+    if (mailLocal !== data.email && passwordLocal !== data.password) {
+      alert("Please enter valid email and password");
+      return;
+    }
+    if (mailLocal !== data.email) alert("Please enter the correct email");
+    if (passwordLocal !== data.password)
+      alert("Please enter the correct password");
+    if (mailLocal === data.email && passwordLocal === data.password) {
+      navigate("/users-posts");
+    }
   };
+
   return (
     <>
-      <div className="login-page">
-        <div className="login-block">
-          <h1>Login Form</h1>
-          <form onSubmit={handleLocalStorage} noValidate>
-            <div className="form-input">
-              <input
-                type="text"
-                id="username"
-                placeholder="enter your name"
-                {...register("username", {
-                  required: {
-                    value: true,
-                    message: "username is required",
-                  },
-                })}
-              />
-              <p className="error-control">{errors.username?.message}</p>
-            </div>
-            <div className="form-input">
-              <input
-                type="email"
-                id="email"
-                placeholder="enter your email-id"
-                {...register("email", {
-                  pattern: {
-                    value:
-                      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                    message: "mail-id is required",
-                  },
-                })}
-              />
-              <p className="error-control">{errors.email?.message}</p>
-            </div>
-            <button disabled={!isDirty || !isValid} className="btn-login">
-              Submit
-            </button>
-          </form>
-        </div>
+      <div className="form-block">
+        <form onSubmit={handleSubmit(handleLocalStorage)} noValidate>
+          <p className="p-login">LOGIN</p>
+          <div className="form-input">
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "Email is required",
+                },
+              })}
+            />
+            <p className="error-control">{errors.email?.message}</p>
+          </div>
+          <div className="form-input">
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Password is required",
+                },
+              })}
+            />
+            <p className="error-control">{errors.password?.message}</p>
+          </div>
+          <button className="btn-login" type="submit">
+            Submit
+          </button>
+        </form>
       </div>
     </>
   );
