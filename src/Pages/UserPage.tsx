@@ -39,12 +39,7 @@ const UserPage = () => {
     <>
       <h1>{email}</h1>
       <div>
-        <button
-          className="back-to-users"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
+        <button className="back-to-users" onClick={() => navigate(-1)}>
           Go Back
         </button>
       </div>
