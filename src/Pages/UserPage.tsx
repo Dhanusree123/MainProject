@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/Usersstyle.css";
@@ -14,28 +14,26 @@ const UserPage = () => {
   const [user, setUser] = useState<Usertype | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const email = localStorage.getItem("Email");
+  const email = localStorage.getItem("email");
 
-  useEffect(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then((res) => {
-        setUser(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+  const handleFetch = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const user = await axios.get(
+        `https://jsonplaceholder.typicode.com/users/${id}`
+      );
+      setUser(user.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [id]);
 
-  if (!user) {
-    return <div>User Not Found ..!</div>;
-  }
-
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
+  useEffect(() => {
+    handleFetch();
+  }, [handleFetch]);
 
   return (
     <>
@@ -44,32 +42,37 @@ const UserPage = () => {
         <button
           className="back-to-users"
           onClick={() => {
-            navigate("/users-posts/users");
+            navigate(-1);
           }}
         >
           Go Back
         </button>
       </div>
-      <div className="user-block">
-        <table className="table-user">
-          <thead>
-            <tr>
-              <th>UserId</th>
-              <th>Id</th>
-              <th>Title</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
+      {!isLoading && user && (
+        <div className="user-block">
+          <table className="table-user">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && !user && <div>User Not Found</div>}
     </>
   );
 };

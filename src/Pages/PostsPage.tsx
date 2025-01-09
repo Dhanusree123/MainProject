@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../styles/Postsstyle.css';
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../styles/Postsstyle.css";
 
 type poststype = {
   userId: number;
@@ -15,11 +15,11 @@ const PostsPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const storedValue = localStorage.getItem('Email');
+  const storedValue = localStorage.getItem("email");
 
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const initialPage = Number(query.get('page')) || 1;
+  const initialPage = Number(query.get("page")) || 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
   const recordsPerPage = 5;
   const npages = Math.ceil(totalCount / recordsPerPage);
@@ -35,7 +35,7 @@ const PostsPage = () => {
         }&_limit=${recordsPerPage}`
       );
       setData(posts.data);
-      const dataCount = posts.headers['x-total-count'];
+      const dataCount = posts.headers["x-total-count"];
 
       setTotalCount(dataCount);
     } catch (err) {
@@ -70,12 +70,12 @@ const PostsPage = () => {
 
   return (
     <>
-      <div className='posts-page'>
+      <div className="posts-page">
         <h1>{storedValue}</h1>
-        <div className='go-to-posts'>
+        <div className="go-to-posts">
           <button
-            className='btn-users-posts'
-            onClick={() => navigate('/users-posts')}
+            className="btn-users-posts"
+            onClick={() => navigate("/users-posts")}
           >
             Go Back
           </button>
@@ -84,12 +84,12 @@ const PostsPage = () => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className='posts-block'>
+          <div className="posts-block">
             {data.map((post, index) => (
               <div
                 key={index}
                 onClick={() => handlePostPage(post.id)}
-                className='posts-div'
+                className="posts-div"
               >
                 <p>
                   <b>UserId:</b>
@@ -111,16 +111,16 @@ const PostsPage = () => {
             ))}
           </div>
         )}
-        <div className='btns-prev-next'>
+        <div className="btns-prev-next">
           <button
-            type='button'
+            type="button"
             onClick={previousPage}
             disabled={currentPage === 1}
           >
             Previous
           </button>
           <button
-            type='button'
+            type="button"
             onClick={nextPage}
             disabled={currentPage === npages}
           >

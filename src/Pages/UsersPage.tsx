@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Usersstyle.css";
@@ -13,7 +13,8 @@ type Usertype = {
 const UsersPage = () => {
   const [data, setData] = useState<Usertype[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const email = localStorage.getItem("Email");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const email = localStorage.getItem("email");
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const initialPage = Number(query.get("page")) || 1;
@@ -22,21 +23,29 @@ const UsersPage = () => {
   const npages = Math.ceil(totalCount / recordsPerPage);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get(
+  const handleFetch = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const users = await axios.get(
         `https://jsonplaceholder.typicode.com/users?_start=${
           (currentPage - 1) * recordsPerPage
         }&_limit=${recordsPerPage}`
-      )
-      .then((res) => {
-        setData(res.data);
-        const dataCount = res.headers["x-total-count"];
+      );
+      setData(users.data);
+      const dataCount = users.headers["x-total-count"];
 
-        setTotalCount(dataCount);
-      })
-      .catch((err) => console.log(err));
+      setTotalCount(dataCount);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [currentPage]);
+
+  useEffect(() => {
+    handleFetch();
+  }, [handleFetch]);
 
   const previousPage = () => {
     if (currentPage !== 1) {
@@ -69,28 +78,34 @@ const UsersPage = () => {
           </button>
         </div>
         <h2 className="users-h2">Users</h2>
-        <div className="users-block">
-          <table className="table-users">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((user, index) => (
-                <tr key={index} onClick={() => handleUserPage(user.id)}>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
+
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <div className="users-block">
+            <table className="table-users">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {data.map((user, index) => (
+                  <tr key={index} onClick={() => handleUserPage(user.id)}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         <div className="btns-prev-next">
           <button
             className="btn-users"

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import '../styles/Postsstyle.css';
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import "../styles/Postsstyle.css";
 
-type posttype = {
+type Posttype = {
   userId: number;
   id: number;
   title: string;
@@ -11,39 +11,45 @@ type posttype = {
 };
 const PostPage = () => {
   const { id } = useParams();
-  const [post, setPost] = useState<posttype | null>(null);
+  const [post, setPost] = useState<Posttype | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const email = localStorage.getItem('Email');
+  const email = localStorage.getItem("email");
+
+  const handleFetch = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const post = await axios.get(
+        `https://jsonplaceholder.typicode.com/posts/${id}`
+      );
+      setPost(post.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((res) => {
-        setPost(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => setIsLoading(false));
-  }, [id]);
+    handleFetch();
+  }, [handleFetch]);
 
   return (
     <>
       <h1>{email}</h1>
       <div>
         <button
-          className='back-to-posts'
+          className="back-to-posts"
           onClick={() => {
-            navigate('/users-posts/posts');
+            navigate(-1);
           }}
         >
           Go Back
         </button>
       </div>
       {!isLoading && post && (
-        <div className='post-block'>
+        <div className="post-block">
           <p>
             <b>UserId:</b>
             {post.userId}
@@ -62,7 +68,8 @@ const PostPage = () => {
           </p>
         </div>
       )}
-      {!isLoading && !post ? <div>Post Not Found</div> : <div>Loading...</div>}
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && !post && <div>Post Not Found</div>}
     </>
   );
 };

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Userspostsstyle.css";
 
 const UsersPostsPage = () => {
-  const storedValue = localStorage.getItem("Email");
+  const storedValue = localStorage.getItem("email");
   const navigate = useNavigate();
 
   return (
